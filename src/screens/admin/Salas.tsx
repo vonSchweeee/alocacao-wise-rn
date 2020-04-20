@@ -11,6 +11,7 @@ import DialogDelete from '../../components/DialogDelete';
 import { createSala, editSala, deleteSala } from '../../store/organizacao/actions/organizacaoActions';
 import { FAB } from 'react-native-paper';
 import DialogCreateSala from '../../components/DialogCreateSala';
+import { Facebook, Instagram } from 'react-content-loader/native';
 
 type dialog = 'none' | 'edit' | 'create' | 'delete' | 'info';
 const initialStateSala = new Sala('', 0, false, false, false);
@@ -19,7 +20,7 @@ const Salas: React.FC = () => {
 
     const dispatch = useDispatch();
     const {path} = useSelector((state: ReduxState) => state.organizacao);
-    const [arraySalas, setArraySalas] = React.useState<Array<Sala> | undefined>([]);
+    const [arraySalas, setArraySalas] = React.useState<Array<Sala> | undefined>(undefined);
     const [dialogOpen, setDialogOpen] = React.useState<dialog>('none');
     const [sala, setSala] = React.useState<Sala>(initialStateSala);
 
@@ -33,7 +34,7 @@ const Salas: React.FC = () => {
                 dispatch(setSalas(arraySalas));
             }
             else {
-                setSalas([]);
+                setArraySalas([]);
             }
         }, (erro: any) => setSalas(undefined));
     }, []);
@@ -106,19 +107,19 @@ const Salas: React.FC = () => {
                 </View>
             );
         }
-        else if(! arraySalas) {
-            return (
-                <View>
-                    <Text style={styles.noText}>Erro ao conectar-se ao servidor.</Text>
-                </View>
-            );
-        }
     };
 
     return (
         <View style={styles.container}>
             <ScrollView>
-                {renderSalas()}
+                { arraySalas ?
+                    renderSalas()
+                    :
+                    <>
+                        <Instagram/>
+                        <Instagram/>
+                    </>
+                }
             </ScrollView>
             <FAB icon='add' style={styles.fab} onPress={() => setDialogOpen('create')}/>
             <DialogCreateSala dialogOpen={dialogOpen} onDismiss={handleDismiss} sala={sala} handleSetSala={handleSetSala} submit={handleSubmit}/>

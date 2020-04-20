@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerContentComponentProps, DrawerContentOptions, DrawerItem } from '@react-navigation/drawer';
 import Home from '../screens/Home';
 import { MaterialIcons } from '@expo/vector-icons';
-import { StackAdmSalaAlocacao, StackPerfilConfig} from './StackNavigator';
+import {  StackPerfilConfig, StackUserSalaAlocacao} from './StackNavigator';
 import { Avatar, Title, Caption, Drawer as PaperDrawer, Divider} from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,7 @@ export default function UserDrawerNavigator() {
     return (
         <Drawer.Navigator initialRouteName="Home" drawerContent={props => DrawerContent({...props, usuario, nomeOrg, logout})}>
             <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Salas" component={StackAdmSalaAlocacao} />
+            <Drawer.Screen name="Salas" component={StackUserSalaAlocacao} />
             <Drawer.Screen name="Perfil" component={StackPerfilConfig} />
             <Drawer.Screen name="Logout" component={Logout} />
         </Drawer.Navigator>

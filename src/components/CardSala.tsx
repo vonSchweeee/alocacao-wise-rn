@@ -39,7 +39,7 @@ const CardSala: React.FC<Props> = props => {
           </View>
         </Card.Content>
         <Card.Actions style={styles.actionArea}>
-          {props.admin && props.setDialogOpen ? <> 
+          {props.admin ? <> 
             <Button onPress={() => props.setDialogOpen('edit', props.sala)}>Editar</Button>
             <Text>  </Text>
             <Button onPress={() => props.setDialogOpen('delete', props.sala)}>Excluir</Button>

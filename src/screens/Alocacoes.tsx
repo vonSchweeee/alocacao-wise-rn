@@ -157,7 +157,7 @@ const Alocacoes: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            {alocacoes ? alocacoes?.length > 200 &&
+            {alocacoes ? alocacoes?.length &&
             <ScrollView>
                 {renderAlocacoes()}
             </ScrollView>

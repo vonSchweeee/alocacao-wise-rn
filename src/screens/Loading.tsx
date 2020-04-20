@@ -1,16 +1,27 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { useSelector } from 'react-redux';
-import { ReduxState } from '../store/types';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
-const Loading: React.FC = () => {
+const ScreenRegisterProcess = () => {
     return (
-        <View>
-            <Text>Carregando...</Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>Iniciando...</Text>
+            <ActivityIndicator size={50}/>
         </View>
     );
 };
 
-export default Loading;
+export default ScreenRegisterProcess;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    text: {
+        textAlign: 'center',
+        fontSize: 30,
+        marginBottom: 15
+    }
+});

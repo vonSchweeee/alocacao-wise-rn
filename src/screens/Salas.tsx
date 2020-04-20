@@ -7,13 +7,14 @@ import { ReduxState } from '../store/types';
 import Sala from '../models/Sala';
 import { setSalas } from '../store/temp/actions/tempActions';
 import CardSala from '../components/CardSala';
+import { Instagram } from 'react-content-loader/native';
 
 
 const Salas: React.FC = () => {
 
     const dispatch = useDispatch();
     const {path} = useSelector((state: ReduxState) => state.organizacao);
-    const [arraySalas, setArraySalas] = React.useState<Array<Sala> | undefined>([]);
+    const [arraySalas, setArraySalas] = React.useState<Array<Sala> | undefined>(undefined);
 
     React.useEffect(() => {
         firebase.database().ref(`organizacoes/${path}/salas`).on('value', snapshot => { 
@@ -25,7 +26,7 @@ const Salas: React.FC = () => {
                 dispatch(setSalas(arraySalas));
             }
             else {
-                setSalas([]);
+                setArraySalas([]);
             }
         }, (erro: any) => setSalas(undefined));
     }, []);
@@ -55,7 +56,14 @@ const Salas: React.FC = () => {
     return (
         <View style={styles.container}>
             <ScrollView>
-                {renderSalas()}
+                { arraySalas ?
+                    renderSalas()
+                    :
+                    <>
+                        <Instagram/>
+                        <Instagram/>
+                    </>
+                }
             </ScrollView>
         </View>
     );
