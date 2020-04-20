@@ -2,7 +2,7 @@ import React from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerContentComponentProps, DrawerContentOptions, DrawerItem } from '@react-navigation/drawer';
 import Home from '../screens/Home';
 import { MaterialIcons } from '@expo/vector-icons';
-import { StackSalaAlocacao, StackPerfilConfig} from './StackNavigator';
+import { StackPerfilConfig, StackUserSalaAlocacao} from './StackNavigator';
 import { Avatar, Title, Caption, Drawer as PaperDrawer, Divider} from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,10 +10,11 @@ import { ReduxState } from '../store/types';
 import Usuario from '../models/Usuario';
 import Dashboard from '../screens/admin/Dashboard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Logout from '../screens/Logout';
 
 const Drawer = createDrawerNavigator();
 
-export default function DrawerNavigator() {
+export default function AdminDrawerNavigator() {
     const usuario = useSelector((state: ReduxState) => state.user.data);
     const nomeOrg = useSelector((state: ReduxState) => state.organizacao.data.nome);
     const dispatch = useDispatch();
@@ -21,9 +22,10 @@ export default function DrawerNavigator() {
     return (
         <Drawer.Navigator initialRouteName="Home" drawerContent={props => DrawerContent({...props, usuario, nomeOrg, logout})}>
             <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Salas" component={StackSalaAlocacao} />
+            <Drawer.Screen name="Salas" component={StackUserSalaAlocacao} />
             <Drawer.Screen name="Perfil" component={StackPerfilConfig} />
             <Drawer.Screen name="Dashboard" component={Dashboard} />
+            <Drawer.Screen name="Logout" component={Logout} />
         </Drawer.Navigator>
     );
 }
@@ -41,10 +43,10 @@ function DrawerContent(props: ContentProps) {
           <View style={styles.userInfoSection}>
           <TouchableOpacity onPress={() => props.navigation.navigate('Perfil')}>
             <Avatar.Image
-              source={{
+              source={props.usuario.urlImagem ? {
                 uri:
                   props.usuario.urlImagem
-              }}
+              } : {}}
               size={50}
               style={styles.avatar}
             />
@@ -118,7 +120,7 @@ function DrawerContent(props: ContentProps) {
                 />
               )}
               label="Sair"
-              onPress={props.logout}
+              onPress={() => props.navigation.navigate('Logout')}
             />
           </PaperDrawer.Section>
           {/* <PaperDrawer.Section title="Preferences">

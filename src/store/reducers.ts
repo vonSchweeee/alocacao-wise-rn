@@ -4,6 +4,7 @@ import uiReducer from './ui/reducers/uiReducer';
 import tempReducer from './temp/reducers/tempReducer';
 import authReducer from './auth/reducers/authReducer';
 import organizacaoReducer from './organizacao/reducers/organizacaoReducer';
+import preferencesReducers from './preferences/reducers/preferencesReducers';
 // import tempReducer from './tempReducer';
 // import organizacaoReducer from './temp/organizacaoReducer';
 
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     user: userReducer,
     ui: uiReducer,
     organizacao: organizacaoReducer,
-    temp: tempReducer
+    temp: tempReducer,
+    preferences: preferencesReducers
 });
 
 export default rootReducer;

@@ -3,6 +3,7 @@ import { UiState } from "./ui/types";
 import { TempState} from './temp/types';
 import { AuthState } from "./auth/types";
 import { OrganizacaoState } from "./organizacao/types";
+import { PreferencesState } from "./preferences/types";
 
 export interface ReduxState {
     user: UserState;
@@ -10,4 +11,5 @@ export interface ReduxState {
     organizacao: OrganizacaoState;
     temp: TempState;
     auth: AuthState;
+    preferences: PreferencesState;
 }

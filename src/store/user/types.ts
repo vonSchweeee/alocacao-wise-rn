@@ -7,7 +7,7 @@ export const USER_UPDATED = 'USER_UPDATE';
 
 
 export type UserState = { 
-    data: Usuario;
+    data: Usuario | {};
     admin: boolean;
 };
 
@@ -17,7 +17,7 @@ export interface SetUserAction {
         user: Usuario;
         admin: boolean;
         uuid: string;
-    }
+    };
 }
 
 export interface LogoutAction {

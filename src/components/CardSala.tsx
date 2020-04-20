@@ -11,7 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   sala: Sala;
-  setDialogOpen: (type: 'edit' | 'delete', sala: Sala) => void;
+  setDialogOpen?: (type: 'edit' | 'delete', sala: Sala) => void;
+  admin: boolean;
 }
 
 const CardSala: React.FC<Props> = props => {
@@ -31,16 +32,18 @@ const CardSala: React.FC<Props> = props => {
         <Card.Cover source={{ uri: props.sala.urlImagem }} style={styles.image}/>
         <Card.Content style={styles.content}>
           <View style={styles.rowContainer}>
-            <Text style={styles.title}>{props.sala.nome.length >= 21 ? props.sala.nome.substring(0, 19) + '...' : props.sala.nome}</Text>
+            <Text style={styles.title}>{props.sala.nome.length >= 23 ? props.sala.nome.substring(0, 21) + '...' : props.sala.nome}</Text>
             <View style={styles.pushContainer}/>
             {props.sala.ac && <MaterialIcons name='ac-unit' size={30}/>}
             {props.sala.multimidia && <MaterialIcons name='tv' size={30}/>}
           </View>
         </Card.Content>
         <Card.Actions style={styles.actionArea}>
-          <Button onPress={() => props.setDialogOpen('edit', props.sala)}>Editar</Button>
-          <Text>  </Text>
-          <Button onPress={() => props.setDialogOpen('delete', props.sala)}>Excluir</Button>
+          {props.admin && props.setDialogOpen ? <> 
+            <Button onPress={() => props.setDialogOpen('edit', props.sala)}>Editar</Button>
+            <Text>  </Text>
+            <Button onPress={() => props.setDialogOpen('delete', props.sala)}>Excluir</Button>
+          </> : null}
           <View style={styles.pushContainer}/>
           <TouchableOpacity activeOpacity={0.75}>
             <MaterialIcons name='info' size={25} style={styles.infoIcon}/>

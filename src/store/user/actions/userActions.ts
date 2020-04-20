@@ -19,7 +19,7 @@ export const removeUser = () => {
 export const changePropic = (base64Image?: string, save?: boolean) => {
   return async (dispatch: any, getState: Function) => {
     try {
-        const res = await axios.post('uploadImage', {image: base64Image, type: 'salas'});
+        const res = await axios.post('https://us-central1-alocacao-wise.cloudfunctions.net/uploadImage', {image: base64Image, type: 'salas'});
         if(save) {
           const usuario = getState().user.data;
           usuario.urlImagem = res.data.imageUrl;

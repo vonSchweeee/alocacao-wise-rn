@@ -19,7 +19,7 @@ const Salas: React.FC = () => {
 
     const dispatch = useDispatch();
     const {path} = useSelector((state: ReduxState) => state.organizacao);
-    const [arraySalas, setArraySalas] = React.useState<Array<Sala>>([]);
+    const [arraySalas, setArraySalas] = React.useState<Array<Sala> | undefined>([]);
     const [dialogOpen, setDialogOpen] = React.useState<dialog>('none');
     const [sala, setSala] = React.useState<Sala>(initialStateSala);
 
@@ -35,7 +35,7 @@ const Salas: React.FC = () => {
             else {
                 setSalas([]);
             }
-        }, (erro: any) => console.log(erro));
+        }, (erro: any) => setSalas(undefined));
     }, []);
 
     const handleDismiss = () => {
@@ -94,10 +94,31 @@ const Salas: React.FC = () => {
         setDialogOpen(type);
     };
 
+    const renderSalas = () => {
+        if(arraySalas && arraySalas.length){
+            return arraySalas.map(sala => <CardSala admin={true} key={sala.nome} sala={sala} setDialogOpen={handleOpenDialog}/>);
+        }
+        else if(! arraySalas?.length) {
+            return (
+                <View>
+                    <Text style={styles.noText}>Nenhuma sala encontrada!</Text>
+                    <Text style={styles.noText}>Seja o primeiro a criar uma.</Text>
+                </View>
+            );
+        }
+        else if(! arraySalas) {
+            return (
+                <View>
+                    <Text style={styles.noText}>Erro ao conectar-se ao servidor.</Text>
+                </View>
+            );
+        }
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView>
-                {arraySalas.length ? arraySalas.map(sala => <CardSala key={sala.nome} sala={sala} setDialogOpen={handleOpenDialog}/>) : null}
+                {renderSalas()}
             </ScrollView>
             <FAB icon='add' style={styles.fab} onPress={() => setDialogOpen('create')}/>
             <DialogCreateSala dialogOpen={dialogOpen} onDismiss={handleDismiss} sala={sala} handleSetSala={handleSetSala} submit={handleSubmit}/>
@@ -119,4 +140,9 @@ const styles = StyleSheet.create({
         right: 30,
         bottom: 30,
     },
+    noText: {
+        textAlign: 'center',
+        marginTop: 15,
+        fontSize: 20
+    }
 });

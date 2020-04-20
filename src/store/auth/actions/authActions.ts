@@ -21,7 +21,7 @@ import { Dispatch } from "redux";
           const userDataRaw = await firebase.database().ref(`organizacoes/${claims.dominio}/${claims.tipo}/${claims.organizacao}/usuarios/${uuid}/data`).once('value');
           const userData = await userDataRaw.val();
           if(uuid) {
-            dispatch(showSuccessToast('Usuário autenticado com sucesso!', 1000))
+            dispatch(showSuccessToast('Usuário autenticado com sucesso!', 1000));
             dispatch(setOrg(claims.dominio, claims.tipo, claims.organizacao));
             dispatch(setUser(userData, claims.admin ? claims.admin : false, uuid));
           }       
@@ -48,14 +48,14 @@ import { Dispatch } from "redux";
         dispatch(showErrorToast('Falha na autenticação! Tente autenticar-se em Login.', 3500));
         dispatch(authFailed());
       }
-    }
-  }
+    };
+  };
 
   export const loginSuccess = () => {
     return {
       type: LOGIN_SUCCESS
-    }
-  }
+    };
+  };
 
   export const register = (user: Usuario, dominio: string, nomeOrg: string, tipoOrg: string) => {
     return async (dispatch: any) => {
@@ -65,11 +65,11 @@ import { Dispatch } from "redux";
         dominio = dominio.replace(/\./g, '-');
         const resp = await firebase.auth().createUserWithEmailAndPassword(user.email, user.senha);
         const uuid = resp.user?.uid;
-        await Axios.post('addUser', {user, uuid, dominio, nomeOrg, tipoOrg});
+        await Axios.post('https://us-central1-alocacao-wise.cloudfunctions.net/addUser', {user, uuid, dominio, nomeOrg, tipoOrg});
         dispatch(showSuccessToast('Usuário cadastrado com sucesso!', 1200));
         setTimeout(() => {
           dispatch(authenticate(user.email, user.senha));
-        }, 400)
+        }, 400);
 
       }
       catch(ex){
@@ -97,8 +97,8 @@ import { Dispatch } from "redux";
           dispatch(showErrorToast('Erro ao cadastrar a conta.'), 4500);
         return dispatch(authFailed());
       }
-    }
-  }
+    };
+  };
 
   export const registerAdm = (user: Usuario, dominio: string, nomeOrg: string) => {
     return async (dispatch: any) => {
@@ -106,11 +106,11 @@ import { Dispatch } from "redux";
         const resp = await firebase.auth().createUserWithEmailAndPassword(user.email, user.senha);
         const uuid = resp.user?.uid;
         if(uuid) {
-          await Axios.post('addAdminUser', {user, uuid, dominio, nomeOrg});
+          await Axios.post('https://us-central1-alocacao-wise.cloudfunctions.net/addAdminUser', {user, uuid, dominio, nomeOrg});
           dispatch(showSuccessToast('Organização e usuário cadastrados com sucesso!', 1200));
           setTimeout(() => {
             dispatch(authenticate(user.email, user.senha));
-          }, 400)
+          }, 400);
         }
         else {
           throw new Error();
@@ -141,23 +141,23 @@ import { Dispatch } from "redux";
           dispatch(showErrorToast('Falha ao registrar o usuário!'), 4500);
         return dispatch(authFailed());
       }
-    }
-  }
+    };
+  };
 
   export const logout = () => {
     return async (dispatch: Dispatch<AuthActionTypes>) => {
         await firebase.auth().signOut();
         return dispatch({type: LOGOUT});
-    }
-  }
+    };
+  };
 
   export const setAuth = () => {
       return {
         type: SET_AUTH
-      } 
-  }
+      }; 
+  };
   export const setNotAuth = () => {
       return {
         type: SET_NOT_AUTH
-      } 
-  }
+      };
+  };

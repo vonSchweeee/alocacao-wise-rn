@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
 import StackNavigator from './navigation/StackNavigator';
 import firebase from './firebase';
 import { useDispatch } from 'react-redux';
@@ -33,6 +33,7 @@ export default function Main() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    marginTop: Platform.OS === 'ios' ? 20 : 0
   },
 });

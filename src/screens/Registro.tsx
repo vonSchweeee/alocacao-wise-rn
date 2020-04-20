@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Picker, TouchableOpacity,  } from 'react-native';
+import { View, StyleSheet, Text, Picker, TouchableOpacity, Platform,  } from 'react-native';
 import { TextInput, Button} from 'react-native-paper';
 import { NavigationProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     text: {
         position: "relative",
         fontSize: 65,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: Platform.OS === 'android' ? 'sans-serif-thin' : 'Arial',
         color: '#000'
     },
     buttonText: {

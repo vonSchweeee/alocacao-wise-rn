@@ -1,6 +1,6 @@
 import { UserActionTypes, USER_SET, LOGOUT, USER_UPDATED } from "../types";
 
-const initialState = {data: null, admin: false}
+const initialState = {data: {}, admin: false};
 export default (state = initialState, action: UserActionTypes) => {
     switch(action.type){
         case USER_SET:
@@ -12,4 +12,4 @@ export default (state = initialState, action: UserActionTypes) => {
         default:
             return state;
     }
-}
+};

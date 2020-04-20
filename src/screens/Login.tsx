@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Keyboard} from 'react-native';
+import { View, StyleSheet, Text, Keyboard, Alert, Platform} from 'react-native';
 import { TextInput, Button, Snackbar} from 'react-native-paper';
 import { NavigationProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
@@ -31,6 +31,10 @@ export default function Login({navigation}: Props){
         else if(! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
         /* eslint-disable */
             setTxtErro("Digite um endereço de e-mail válido.");
+        }
+
+        if(txtErro){
+            Alert.alert('Erro', txtErro);
         }
 
         else {
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     text: {
         marginBottom: 20,
         fontSize: 65,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: Platform.OS === 'android' ? 'sans-serif-thin' : 'Arial',
         color: '#000'
     },
     buttonText: {

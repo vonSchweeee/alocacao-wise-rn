@@ -6,7 +6,7 @@ import moment from 'moment';
 import Alocacao from '../models/Alocacao';
 import Usuario from '../models/Usuario';
 
-const LeftContent = (props: any) => <Avatar.Image size={props.size} source={{uri: props.source}}/>
+const LeftContent = (props: any) => <Avatar.Image size={props.size} source={{uri: props.source}}/>;
 
 type Props = {
   alocacao: Alocacao;
@@ -45,7 +45,7 @@ const CardAlocacao: React.FC<Props> = props => {
           <Button onPress={() => handleDialogOpen('edit')}>Editar</Button>
             <Text>  </Text>
           <Button onPress={() => handleDialogOpen('delete')}>Excluir</Button>
-          </> : null}
+          </> : <View style={styles.emptyActions}/>}
           <View style={styles.pushContainer}/>
         </Card.Actions>
       </Card>
@@ -94,6 +94,9 @@ const styles = StyleSheet.create({
   },
   actionArea: {
     padding: 3
+  },
+  emptyActions: {
+    height: 35
   }
 });
 

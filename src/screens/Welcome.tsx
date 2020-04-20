@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, Platform} from 'react-native';
 import { Button } from 'react-native-paper';
 
 const Welcome = ({navigation}: any) => {
@@ -15,9 +15,9 @@ const Welcome = ({navigation}: any) => {
             <Button mode='outlined' style={styles.registerButton} onPress={() => navigation.navigate('Registro')}>
                 <Text style={[styles.buttonText, styles.registerText]}>Registro</Text>
             </Button>
-            <Button mode='outlined' style={styles.registerOrgButton} onPress={() => navigation.navigate('Registro')}>
+            {/* <Button mode='outlined' style={styles.registerOrgButton} onPress={() => navigation.navigate('Registro')}>
                 <Text style={[styles.registerOrgText, styles.buttonText]}>Cadastrar sua organização</Text>
-            </Button>
+            </Button> */}
             <View style={styles.pushContainer}/>
         </View>
     );
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
         marginBottom: 1,
         fontSize: 50,
-        fontFamily: 'sans-serif-medium',
+        fontFamily: Platform.OS === 'android' ? 'sans-serif-medium' : 'Arial',
         color: '#002171',
         textAlign: 'center'
     },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     sloganText: {
         fontWeight: '100',
         marginBottom: 10,
-        fontFamily: 'sans-serif-medium'
+        fontFamily: Platform.OS === 'android' ? 'sans-serif-medium' : 'Arial'
     }
 });
 

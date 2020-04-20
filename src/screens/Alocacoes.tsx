@@ -4,18 +4,17 @@ import { StyleSheet, Text, View, ScrollView, Keyboard } from 'react-native'
 import firebase from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from '../store/types';
-import Sala from '../models/Sala';
 import { setSalas, actionReset } from '../store/temp/actions/tempActions';
 import CardAlocacao from '../components/CardAlocacao';
 import Alocacao from '../models/Alocacao';
 import Usuario from '../models/Usuario';
-import { FAB } from 'react-native-paper';
+import { FAB, Card } from 'react-native-paper';
 import DialogCreateAlocacao from '../components/DialogCreateAlocacao';
 import moment from 'moment';
 import { showErrorToast } from '../store/ui/actions/uiActions';
 import { criarAlocacao, editarAlocacao, excluirAlocacao } from '../store/organizacao/actions/organizacaoActions';
-import { useNavigation } from '@react-navigation/native';
 import DialogDelete from '../components/DialogDelete';
+import {Facebook} from 'react-content-loader';
 
 type dialog = 'none' | 'edit' | 'create' | 'delete' | 'info';
 
@@ -30,7 +29,6 @@ const Alocacoes: React.FC = () => {
     const [quantidadeAlocacoes, setQuantidadeAlocacoes] = React.useState<number>(0);
     const [alocacao, setAlocacao] = React.useState(initialStateAlocacao);
     const [nomeSala, setNomeSala] = React.useState();
-    const navigation = useNavigation();
 
     React.useEffect(() => {
 
@@ -140,13 +138,39 @@ const Alocacoes: React.FC = () => {
                 }
             });
         }
+        else if(! alocacoes?.length) {
+            return (
+                <View>
+                    <Text style={styles.noText}>Nenhuma alocação encontrada!</Text>
+                    <Text style={styles.noText}>Seja o primeiro a criar uma.</Text>
+                </View>
+            );
+        }
+        else if(! alocacoes) {
+            return (
+                <View>
+                    <Text style={styles.noText}>Erro ao conectar-se ao servidor.</Text>
+                </View>
+            );
+        }
     };
 
     return (
         <View style={styles.container}>
+            {alocacoes ? alocacoes?.length > 200 &&
             <ScrollView>
                 {renderAlocacoes()}
             </ScrollView>
+            : 
+            <ScrollView>
+                <Card>
+                    <Facebook/>
+                </Card>
+                <Facebook/>
+                <Facebook/>
+                <Facebook/>
+            </ScrollView>
+            }
             <FAB icon='add' style={styles.fab} onPress={() => setDialogOpen('create')}/>
             <DialogCreateAlocacao 
                 dialogOpen={dialogOpen} onDismiss={handleDismiss} alocacao={alocacao}
@@ -171,4 +195,9 @@ const styles = StyleSheet.create({
         right: 30,
         bottom: 30,
     },
+    noText: {
+        textAlign: 'center',
+        marginTop: 15,
+        fontSize: 20
+    }
 });

@@ -33,7 +33,7 @@ export function createOrg(organizacao: Organizacao, dominio: string, user: Usuar
             const resp = await firebase.auth().createUserWithEmailAndPassword(user.email, user.senha);
             const uuid = resp.user?.uid;
             if(uuid) {
-                const response = await Axios.post('createOrgWithAdm', {user, uuid, dominio, nomeOrg, organizacao});
+                const response = await Axios.post('https://us-central1-alocacao-wise.cloudfunctions.net/createOrgWithAdm', {user, uuid, dominio, nomeOrg, organizacao});
                 dispatch(showSuccessToast(response.data.msg || 'Organização e usuário cadastrados com sucesso!', 1200));
                 setTimeout(() => {
                     dispatch(authenticate(user.email, user.senha));
@@ -68,7 +68,7 @@ export function setOrg(dominio: string, tipo: string, nome: string){
         catch {
             return dispatch(showErrorToast('Ocorreu um erro.', 60000));
         }
-    }
+    };
 }
 
 
@@ -120,7 +120,7 @@ export function createSala(sala: Sala, base64image: string) {
             sala.id = sala.nome.replace(/ /g, '-').toLowerCase();
             if(base64image){
                 try {
-                    const res = await Axios.post('uploadImage', {image: base64image});
+                    const res = await Axios.post('https://us-central1-alocacao-wise.cloudfunctions.net/uploadImage', {image: base64image});
                     sala.urlImagem = res.data.imageUrl;
                     await firebase.database().ref(`organizacoes/${getState().organizacao.path}/salas/${sala.id}`).set(sala);
                     dispatch(showSuccessToast('Sala adicionada com sucesso!'));
@@ -193,7 +193,7 @@ export function criarAlocacao(alocacao: Alocacao, quantAlocacoes: number, arrayA
                         alocacao.id = quantAlocacoes;
                         const dataAlocacao = moment(alocacao.inicio).format('YYYY-MM-DD');  //O path é a quantidade de alocações pois elas são salvas como índice de array (-1)
                         const pathAlocacao = `organizacoes/${getState().organizacao.path}/salas/${getState().organizacao.idSala}/alocacoes/${dataAlocacao}/${quantAlocacoes}`;
-                        await firebase.database().ref(pathAlocacao).set({...alocacao, createdAt: new Date().toString() });
+                        await firebase.database().ref(pathAlocacao).set({...alocacao, createdAt: moment().toISOString() });
                         dispatch(showSuccessToast('Alocação realizada com sucesso!'));
                         return dispatch(actionSuccess());
                     }
