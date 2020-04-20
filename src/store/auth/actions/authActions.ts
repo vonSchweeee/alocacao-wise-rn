@@ -2,7 +2,7 @@ import firebase from "../../../firebase";
 import { showErrorToast, showSuccessToast } from "../../ui/actions/uiActions";
 import Axios from 'axios';
 import Usuario from "../../../models/Usuario";
-import { authFailed } from "../../temp/actions/tempActions";
+import { authFailed, actionFailure } from "../../temp/actions/tempActions";
 import { setUser } from "../../user/actions/userActions";
 import { LOGIN_SUCCESS, AuthActionTypes, SET_AUTH, SET_NOT_AUTH } from "../types";
 import { LOGOUT } from "../../user/types";
@@ -75,6 +75,7 @@ import { Dispatch } from "redux";
       catch(ex){
         console.log(ex);
         if(ex) {
+          dispatch(actionFailure());
           if(ex.code){
             switch(ex.code){
               case 'auth/email-already-in-use':

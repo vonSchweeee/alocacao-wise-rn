@@ -20,6 +20,7 @@ import ScreenEmail from '../screens/registro/ScreenEmail';
 import ScreenTipoOrg from '../screens/registro/ScreenTipoOrg';
 import ScreenUser from '../screens/registro/ScreenUser';
 import ScreenRegisterProcess from '../screens/registro/ScreenRegisterProcess';
+import ScreenFiliais from '../screens/registro/ScreenFiliais';
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,7 @@ export const StackRegistro = () => {
     <Stack.Navigator initialRouteName={'ScreenEmail'} headerMode='none'>
           <Stack.Screen name="ScreenEmail" component={ScreenEmail} />
           <Stack.Screen name="TipoOrgScreen" component={ScreenTipoOrg}/>
+          <Stack.Screen name="FiliaisScreen" component={ScreenFiliais}/>
           <Stack.Screen name="UserScreen" component={ScreenUser}/>
           <Stack.Screen name="RegisterProcessScreen" component={ScreenRegisterProcess}/>
     </Stack.Navigator>

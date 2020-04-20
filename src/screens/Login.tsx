@@ -4,6 +4,7 @@ import { TextInput, Button, Snackbar} from 'react-native-paper';
 import { NavigationProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { authenticate } from '../store/auth/actions/authActions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
     navigation: NavigationProp<any>;
@@ -51,6 +52,9 @@ export default function Login({navigation}: Props){
             <Button mode="contained" style={styles.button} onPress={() => handleLogin()}> 
                 <Text style={styles.buttonText}>Login</Text>
             </Button>
+            <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+                <Text>Não tem uma conta? Cadastre-se.</Text>
+            </TouchableOpacity>
         </View>
     );
 }
