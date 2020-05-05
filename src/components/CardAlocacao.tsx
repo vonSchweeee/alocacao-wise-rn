@@ -11,6 +11,7 @@ const LeftContent = (props: any) => <Avatar.Image size={props.size} source={{uri
 type Props = {
   alocacao: Alocacao;
   usuario: Usuario;
+  admin: boolean;
   handleSetAlocacao: (alocacao: Alocacao, tipoDado: string) => void;
   openDialog: (type: 'edit' | 'delete') => void;
   uidUsuarioAtual?: string;
@@ -41,7 +42,7 @@ const CardAlocacao: React.FC<Props> = props => {
         </Card.Content>
         <Divider style={{height: 1}}/>
         <Card.Actions style={styles.actionArea}>
-          {props.uidUsuarioAtual === props.alocacao.uidUsuario ? <> 
+          {props.uidUsuarioAtual === props.alocacao.uidUsuario || props.admin ? <> 
           <Button onPress={() => handleDialogOpen('edit')}>Editar</Button>
             <Text>  </Text>
           <Button onPress={() => handleDialogOpen('delete')}>Excluir</Button>

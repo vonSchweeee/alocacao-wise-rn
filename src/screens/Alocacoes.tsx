@@ -14,7 +14,7 @@ import moment from 'moment';
 import { showErrorToast } from '../store/ui/actions/uiActions';
 import { criarAlocacao, editarAlocacao, excluirAlocacao } from '../store/organizacao/actions/organizacaoActions';
 import DialogDelete from '../components/DialogDelete';
-import {Facebook} from 'react-content-loader';
+import {Facebook, Instagram} from 'react-content-loader/native';
 
 type dialog = 'none' | 'edit' | 'create' | 'delete' | 'info';
 
@@ -22,6 +22,7 @@ const Alocacoes: React.FC = () => {
     
     const dispatch = useDispatch();
     const {path, date, idSala} = useSelector((state: ReduxState) => state.organizacao);
+    const {admin} = useSelector((state: ReduxState) => state.user);
     const initialStateAlocacao = new Alocacao('', '', '',   moment(date + ' 00:00:00').toDate(),  moment(date + ' 00:00:00').toDate());
     const [dialogOpen, setDialogOpen] = React.useState<dialog>('none');
     const [alocacoes, setAlocacoes] = React.useState<Array<Alocacao> | undefined>([]);
@@ -48,7 +49,7 @@ const Alocacoes: React.FC = () => {
                 setQuantidadeAlocacoes(arrayAlocacoes.length);
             }
             else {
-                setAlocacoes([]);
+                setAlocacoes(undefined);
             }
         }, (erro: any) => setAlocacoes(undefined));
         
@@ -133,7 +134,7 @@ const Alocacoes: React.FC = () => {
                     return(
                         <CardAlocacao 
                             handleSetAlocacao={handleSetAlocacao} openDialog={openDialog} 
-                            alocacao={alocacao} usuario={usuario} uidUsuarioAtual={firebase.auth().currentUser?.uid} key={index} />
+                            alocacao={alocacao} usuario={usuario} uidUsuarioAtual={firebase.auth().currentUser?.uid} key={index} admin={admin} />
                     );
                 }
             });
@@ -157,19 +158,16 @@ const Alocacoes: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            {alocacoes ? alocacoes?.length &&
+            {alocacoes ? alocacoes?.length ?
             <ScrollView>
                 {renderAlocacoes()}
             </ScrollView>
             : 
-            <ScrollView>
-                <Card>
-                    <Facebook/>
-                </Card>
-                <Facebook/>
-                <Facebook/>
-                <Facebook/>
-            </ScrollView>
+                <>
+                    <Instagram/>
+                    <Instagram/>
+                </>
+            : renderAlocacoes()
             }
             <FAB icon='add' style={styles.fab} onPress={() => setDialogOpen('create')}/>
             <DialogCreateAlocacao 

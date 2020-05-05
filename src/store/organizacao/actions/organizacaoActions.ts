@@ -162,8 +162,9 @@ export function setSala(sala?: Sala, idSalaP? : string){
     };
 }
 
-export function criarAlocacao(alocacao: Alocacao, quantAlocacoes: number, arrayAlocacoes?: Alocacao[]){
+export function criarAlocacao(alocacao: Alocacao, quantAlocacoes: number, arrayAlocacoesUnd?: Alocacao[]){
     return async (dispatch: Dispatch<any>, getState: Function) => {
+        const arrayAlocacoes = arrayAlocacoesUnd || [];
         if (arrayAlocacoes) {
             // eslint-disable-next-line
             const conflito = arrayAlocacoes.find((aloc) => {

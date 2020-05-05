@@ -27,6 +27,9 @@
     "androidStatusBar": {
       "barStyle": "light-content",
       "backgroundColor": "#121844"
+    },
+    "android": {
+      "package": "br.com.wises.alocacao"
     }
   }
 }
