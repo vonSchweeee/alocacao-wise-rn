@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Usuario from '../models/Usuario';
 import moment from 'moment';
+import { Avatar } from 'react-native-paper';
 
 type Props = {
     log: any;
@@ -13,7 +14,7 @@ const insertMiddle = (str: string, start: number, delCount: number, newSubStr: s
 };
 
 const DashboardItem: React.FC<Props> = props => {
-
+    
     let texto;
     let v = '';
     let color = '#fafafa';
@@ -22,22 +23,24 @@ const DashboardItem: React.FC<Props> = props => {
             texto = ` alterou a alocação '${props.log.nome}', modificando`;
             switch(props.log.content){
                 case 'alocacao':
-                    color = '#fafcff';
-                    if(props.log.diff.nome) {
-                        texto = `${texto}${v} seu nome para '${props.log.diff.nome}'`
-                        v = ',';
-                    }
-                    if(props.log.diff.descricao) {
-                        texto = `${texto}${v} sua descrição para '${props.log.diff.descricao}'`
-                        v = ',';
-                    }
-                    if(props.log.diff.inicio) {
-                        texto = `${texto}${v} seu horario de início para ${moment(props.log.diff.inicio).format('HH:mm')}`;
-                        v = ',';
-                    }
-                    if(props.log.diff.inicio) {
-                        texto = `${texto}${v} seu horario de fim para ${moment(props.log.diff.fim).format('HH:mm')}`;
-                        v = ',';
+                    color = '#d1e3ff';
+                    if(props.log.diff) {
+                        if(props.log.diff.nome) {
+                            texto = `${texto}${v} seu nome para '${props.log.diff.nome}'`
+                            v = ',';
+                        }
+                        if(props.log.diff.descricao) {
+                            texto = `${texto}${v} sua descrição para '${props.log.diff.descricao}'`
+                            v = ',';
+                        }
+                        if(props.log.diff.inicio) {
+                            texto = `${texto}${v} seu horario de início para ${moment(props.log.diff.inicio).format('HH:mm')}`;
+                            v = ',';
+                        }
+                        if(props.log.diff.inicio) {
+                            texto = `${texto}${v} seu horario de fim para ${moment(props.log.diff.fim).format('HH:mm')}`;
+                            v = ',';
+                        }
                     }
                     if(texto.split(',').length > 2)
                         texto = insertMiddle(texto, texto.lastIndexOf(','), 2, ' e ');
@@ -63,7 +66,10 @@ const DashboardItem: React.FC<Props> = props => {
 
     return (
         <View style={styles.container}>
-            <Text>{`${props.usuario.nome}${texto}`}</Text>
+            <View style={[styles.item, {backgroundColor: color}]}>
+                <Text style={styles.txtLog}>{`${props.usuario.nome}${texto}`}</Text>
+                <Text style={styles.txtTime}>{`${moment(props.log.timestamp).format('HH:ss')}`}</Text>
+            </View>
         </View>
     );
 };
@@ -74,5 +80,17 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         flex: 1
-    }
+    },
+    item: {
+        flex: 1,
+        borderBottomWidth: 1,
+        paddingBottom: 8,
+        borderColor: '#000',
+    },
+    txtLog: {
+        fontSize: 20
+    },
+    txtTime: {
+        fontWeight: 'bold'
+    },
 });

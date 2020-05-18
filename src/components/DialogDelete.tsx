@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import { ReduxState } from '../store/types';
 
 type dialog = 'none' | 'edit' | 'create' | 'delete' | 'info';
 
@@ -13,6 +15,16 @@ type Props = {
 }
 
 const DialogDelete: React.FC<Props> = props => {
+
+    const {action} = useSelector((state: ReduxState) => state.temp);
+
+    React.useEffect(() => {
+        if(action === 'success') {
+            props.onDismiss();
+        }
+
+    }, [action]);
+
     if(props.subject === 'alocacao')
         return (
             <View>

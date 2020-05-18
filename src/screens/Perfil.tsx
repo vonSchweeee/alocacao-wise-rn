@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         height: 118,
     },
     bsWrapper: {
-        backgroundColor: '#0001'
+        backgroundColor: 'transparent'
     },
     btnBs: {
         justifyContent: 'center',

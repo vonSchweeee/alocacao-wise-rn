@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native'
 import { Button, Dialog, Portal, Divider, TextInput, IconButton } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Alocacao from '../models/Alocacao';
@@ -24,6 +24,7 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
     const [pickerOpen, setPickerOpen] = React.useState('none');
     const {action } = useSelector((state: ReduxState) => state.temp);
     const [btnDisabled, setBtnDisabled] = React.useState(false);
+    const [texto, setTexto] = React.useState('hmm');
 
     React.useEffect(() => {
         if(action === 'success') {
@@ -34,12 +35,12 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
             return setBtnDisabled(false);
     }, [action]);
 
-    const handleTimeChange = (e: any, horario: 'inicio' | 'fim') => {
+    const handleTimeChange = (e: Event, date: any,horario: 'inicio' | 'fim') => {
         if(e.type === 'dismissed'){
             return setPickerOpen('none');
         }
         else if(e.type === 'set'){
-            const data = moment(e.nativeEvent.timestamp).toDate();
+            const data = moment(date).toDate();
             setPickerOpen('none');
             return props.handleSetAlocacao(data, horario);
         }
@@ -47,8 +48,8 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
 
     return (
         <Portal>
-            <Dialog visible={props.dialogOpen === 'create' || props.dialogOpen === 'edit'} onDismiss={! btnDisabled ? props.onDismiss : () => {}}>
-                <Dialog.Title style={styles.title}>{props.dialogOpen === 'create' ? 'Realizar Alocação' : 'Editar Alocação'}</Dialog.Title>
+            <Dialog visible={props.dialogOpen === 'create'} onDismiss={! btnDisabled ? props.onDismiss : () => {}}>
+                <Dialog.Title style={styles.title}>{'Realizar Alocação'}</Dialog.Title>
                 <Dialog.Content>
                     <TextInput mode='flat' style={styles.textInput} label='Título' 
                         onChangeText={txt => props.handleSetAlocacao(txt, 'nome')}  
@@ -59,11 +60,13 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
                         value={props.alocacao.descricao}
                     />
                     <View style={styles.wrapper}>
-                        <TextInput value={moment(props.alocacao.inicio).format('HH:mm')} 
-                            mode='flat' style={styles.textInput} 
-                            editable={false}
-                            label='Horário de Início' 
-                        />
+                        <TouchableOpacity onPress={() => setPickerOpen('inicio')}>
+                            <TextInput value={moment(props.alocacao.inicio).format('HH:mm')} 
+                                mode='flat' style={styles.textInput} 
+                                editable={false}
+                                label='Horário de Início' 
+                            />
+                        </TouchableOpacity>
                         <IconButton style={styles.inputIcon} icon='event' color='#333' size={30} 
                             onPress={() => setPickerOpen('inicio')} >
                         </IconButton>
@@ -86,7 +89,7 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
                             locale='pt-BR'
                             minuteInterval={10}
                             timeZoneOffsetInMinutes={-180}
-                            onChange={e => handleTimeChange(e, 'inicio')}
+                            onChange={(e, date) => handleTimeChange(e, date, 'inicio')}
                         />
                         :
                         pickerOpen === 'fim' ?
@@ -96,7 +99,7 @@ const DialogCreateAlocacao: React.FC<Props> = props => {
                             locale='pt-BR'
                             minuteInterval={10}
                             timeZoneOffsetInMinutes={-180}
-                            onChange={e => handleTimeChange(e, 'fim')}
+                            onChange={(e, date) => handleTimeChange(e, date, 'fim')}
                         /> : null : null
                     }
                 </Dialog.Content>

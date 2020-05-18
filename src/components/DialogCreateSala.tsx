@@ -70,7 +70,6 @@ const DialogCreateSala: React.FC<Props> = props => {
                         setImage({uri: manipulatedResult.uri, base64: manipulatedResult.base64});
                 }
                 else {
-                    console.log(result);
                     setImage({uri: result.uri, base64: result.base64});
                 }
             }
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
         height: 118,
     },
     bsWrapper: {
-        backgroundColor: '#0001'
+        backgroundColor: 'transparent'
     },
     btnBs: {
         justifyContent: 'center',

@@ -3,7 +3,7 @@ import { SET_ORG_USERS, SET_ORG, SetOrganizacaoAction, SetSalaAction, SET_SALA, 
 import { showErrorToast, showSuccessToast } from '../../ui/actions/uiActions';
 import { authenticate } from '../../auth/actions/authActions';
 import Usuario from '../../../models/Usuario';
-import { authFailed, resetAuthFailed, actionSuccess, actionFailure} from '../../temp/actions/tempActions';
+import { authFailed, resetAuthFailed, actionSuccess, actionFailure, actionReset} from '../../temp/actions/tempActions';
 import Axios from 'axios';
 import firebase from '../../../firebase';
 import { Dispatch} from 'redux';
@@ -214,13 +214,12 @@ export function criarAlocacao(alocacao: Alocacao, quantAlocacoes: number, arrayA
     }
 }
 
-export function editarAlocacao(alocacao: Alocacao, indiceAlocacao: number, arrayAlocacoes?: Alocacao[]){
+export function editarAlocacao(alocacao: Alocacao, indiceAlocacao: number, arrayAlocacoes?: Alocacao[], edit?: boolean){
     return async (dispatch: Dispatch<any>, getState: Function) => {
         if (arrayAlocacoes) {
             // eslint-disable-next-line
             const conflito = arrayAlocacoes.find((aloc) => {
                 if(alocacao.id !== aloc.id && aloc.ativo){
-                    console.log(aloc);
                     if(new Date(alocacao.inicio) >= new Date(aloc.inicio) &&  new Date(alocacao.inicio) <= new Date(aloc.fim)){
                         return aloc;
                     }
@@ -264,6 +263,7 @@ export function editarAlocacao(alocacao: Alocacao, indiceAlocacao: number, array
 export function excluirAlocacao(alocacao: Alocacao, indiceAlocacao: number){
     return async (dispatch: Dispatch<any>, getState: Function) => {
             try {
+                dispatch(actionReset());
                 const dataAlocacao = moment(alocacao.inicio).format('YYYY-MM-DD');  //O path é a quantidade de alocações pois elas são salvas como índice de array (-1)
                 const pathAlocacao = `organizacoes/${getState().organizacao.path}/salas/${getState().organizacao.idSala}/alocacoes/${dataAlocacao}/${alocacao.id}`;
                 await firebase.database().ref(pathAlocacao).set({...alocacao, ativo: false});

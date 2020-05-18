@@ -15,6 +15,7 @@ import { showErrorToast } from '../store/ui/actions/uiActions';
 import { criarAlocacao, editarAlocacao, excluirAlocacao } from '../store/organizacao/actions/organizacaoActions';
 import DialogDelete from '../components/DialogDelete';
 import {Facebook, Instagram} from 'react-content-loader/native';
+import DialogEditAlocacao from '../components/DialogEditAlocacao';
 
 type dialog = 'none' | 'edit' | 'create' | 'delete' | 'info';
 
@@ -23,6 +24,7 @@ const Alocacoes: React.FC = () => {
     const dispatch = useDispatch();
     const {path, date, idSala} = useSelector((state: ReduxState) => state.organizacao);
     const {admin} = useSelector((state: ReduxState) => state.user);
+    const [alocacaoAtiva, setAlocacaoAtiva] = React.useState(false);
     const initialStateAlocacao = new Alocacao('', '', '',   moment(date + ' 00:00:00').toDate(),  moment(date + ' 00:00:00').toDate());
     const [dialogOpen, setDialogOpen] = React.useState<dialog>('none');
     const [alocacoes, setAlocacoes] = React.useState<Array<Alocacao> | undefined>([]);
@@ -92,20 +94,26 @@ const Alocacoes: React.FC = () => {
         }
     };
 
-    const submit = (type: dialog) => {
+    const submit = (type: dialog, inicioEdit?: string | Date, fimEdit?: string | Date) => {
+        const alocacaoEdit = {...alocacao};
         if(! alocacao.nome|| ! alocacao.descricao || alocacao.inicio === initialStateAlocacao.inicio|| alocacao.fim === initialStateAlocacao.fim){
             return dispatch(showErrorToast('Preencha todos os campos.', 3000));
         }
-
         if(alocacao.inicio > alocacao.fim){
             return dispatch(showErrorToast('O horário de início deve ser antes do fim.', 2000));
         }
+        if(inicioEdit)
+            alocacaoEdit.inicio = inicioEdit;
+        if(fimEdit)
+            alocacaoEdit.fim = fimEdit;
+
         Keyboard.dismiss();
         dispatch(actionReset());
+
         if (type === 'create')
             dispatch(criarAlocacao(alocacao, quantidadeAlocacoes, alocacoes));
         else if(type === 'edit')
-            dispatch(editarAlocacao(alocacao, quantidadeAlocacoes -1, alocacoes));
+            dispatch(editarAlocacao(alocacaoEdit, quantidadeAlocacoes -1, alocacoes, true));
         else if(type === 'delete')
             dispatch(excluirAlocacao(alocacao, quantidadeAlocacoes - 1));
     };
@@ -124,8 +132,11 @@ const Alocacoes: React.FC = () => {
     const renderAlocacoes = () => {
         if(alocacoes && alocacoes.length && usuarios){
             // eslint-disable-next-line array-callback-return
-            return alocacoes.map((alocacao, index) => {
+            let items = alocacoes.map((alocacao, index) => {
                 if(alocacao.ativo) {
+                    if(! alocacaoAtiva) {
+                        setAlocacaoAtiva(true);
+                    }
                     let usuario: Usuario;
                     if(usuarios[alocacao.uidUsuario])
                         usuario = usuarios[alocacao.uidUsuario].data;
@@ -138,8 +149,18 @@ const Alocacoes: React.FC = () => {
                     );
                 }
             });
+            if(alocacaoAtiva)
+                return items;
+            else {
+                return (
+                    <View>
+                        <Text style={styles.noText}>Nenhuma alocação encontrada!</Text>
+                        <Text style={styles.noText}>Seja o primeiro a criar uma.</Text>
+                    </View>
+                );
+            }
         }
-        else if(! alocacoes?.length) {
+        else if(! alocacoes?.length && ! alocacaoAtiva) {
             return (
                 <View>
                     <Text style={styles.noText}>Nenhuma alocação encontrada!</Text>
@@ -171,6 +192,10 @@ const Alocacoes: React.FC = () => {
             }
             <FAB icon='add' style={styles.fab} onPress={() => setDialogOpen('create')}/>
             <DialogCreateAlocacao 
+                dialogOpen={dialogOpen} onDismiss={handleDismiss} alocacao={alocacao}
+                handleSetAlocacao={handleSetAlocacao} submit={submit}
+            />
+            <DialogEditAlocacao 
                 dialogOpen={dialogOpen} onDismiss={handleDismiss} alocacao={alocacao}
                 handleSetAlocacao={handleSetAlocacao} submit={submit}
             />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Title } from 'react-native-paper';
 import firebase from '../../firebase';
 import { ReduxState } from '../../store/types';
@@ -12,6 +12,7 @@ const Dashboard = () => {
     const [logs, setLogs] = React.useState<Array<any>>([]);
     const {path} = useSelector((state: ReduxState) => state.organizacao);
     const [usuarios, setUsuarios] = React.useState<any>();
+
 
     React.useEffect(() => {
         firebase.database().ref(`organizacoes/${path}/log/${moment().format('YYYY-MM-DD')}`).on('value', snapshot => {
@@ -40,8 +41,13 @@ const Dashboard = () => {
     
     return (
         <View style={styles.container}>
-            <Title style={styles.title}>Dashboard</Title>
-            {logs.length && usuarios ? logs.map((log, index) => <DashboardItem log={log} usuario={usuarios[log.usuario].data} key={index}/>) : null}
+            <View style={styles.titleContainer}>
+              <Title style={styles.title}>Dashboard</Title>
+            </View>
+            <ScrollView style={styles.scrollView}>
+              {logs.length && usuarios ? logs.map((log, index) => <DashboardItem log={log} usuario={usuarios[log.usuario].data} key={index}/>) : 
+              <View  style={styles.pushContainer}/>}
+            </ScrollView>
         </View>
     );
 };
@@ -52,10 +58,25 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 3
+        paddingHorizontal: 1
+    },
+    pushContainer: {
+      flex: 1
+    },
+    titleContainer: {
+      backgroundColor: '#F0F0F0',
+      borderBottomWidth: 2,
+      borderColor: '#000'
     },
     title: {
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        alignSelf: 'center',
+        fontSize: 35,
+        paddingTop: 10
+    },
+    scrollView: {
+      borderColor: '#000',
+      borderBottomWidth: 1
     }
 });
